@@ -15,6 +15,9 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -37,14 +40,21 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
+            'enableStrictParsing' => false,
             'showScriptName' => false,
             'rules' => [
+                [
+                    'class' => 'backend\models\urlRules\UserRule',
+                    'controller' => 'user',
+                    'extraPatterns' => [
+                        'login' => 'login',
+                        'signup' => 'signup'
+                    ],
+                ],
             ],
-        ],
-        */
+        ]
     ],
     'params' => $params,
 ];

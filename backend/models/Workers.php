@@ -73,6 +73,17 @@ class Workers extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Companies]].
+     *
+     * @return \yii\db\ActiveQuery|\backend\models\query\CompaniesQuery
+     */
+    public function getCompanies()
+    {
+        return $this->hasMany(Compworkers::class, ['id' => 'workers_id'])
+            ->viaTable('companies', ['companies_id' => 'id']);
+    }
+
+    /**
      * {@inheritdoc}
      * @return \backend\models\query\WorkersQuery the active query used by this AR class.
      */

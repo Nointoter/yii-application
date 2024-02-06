@@ -1,5 +1,6 @@
 <?php
 
+use Faker\Factory;
 use yii\db\Migration;
 
 /**
@@ -12,7 +13,16 @@ class m240206_132730_fill_workers_table extends Migration
      */
     public function safeUp()
     {
+        $faker = Factory::create();
 
+        for ($i = 0; $i < 100; $i++)
+        {
+            $this->insert('workers', [
+                'cities_id' => $faker->numberBetween(1, 10),
+                'name' => $faker->firstName(30),
+                'surname' => $faker->lastName(50),
+            ]);
+        }
     }
 
     /**
@@ -20,9 +30,7 @@ class m240206_132730_fill_workers_table extends Migration
      */
     public function safeDown()
     {
-        echo "m240206_132730_fill_workers_table cannot be reverted.\n";
-
-        return false;
+        return $this->truncateTable('workers');
     }
 
     /*
@@ -34,7 +42,7 @@ class m240206_132730_fill_workers_table extends Migration
 
     public function down()
     {
-        echo "m240206_132730_fill_workers_table cannot be reverted.\n";
+        echo "m240204_115357_fill_workers_table cannot be reverted.\n";
 
         return false;
     }

@@ -70,6 +70,17 @@ class Companies extends \yii\db\ActiveRecord
     public function getCompworkers()
     {
         return $this->hasMany(Compworkers::class, ['companies_id' => 'id']);
+    } 
+    
+    /**
+     * Gets query for [[Workers]].
+     *
+     * @return \yii\db\ActiveQuery|\backend\models\query\WorkersQuery
+     */
+    public function getWorkers()
+    {
+        return $this->hasMany(Compworkers::class, ['id' => 'companies_id'])
+            ->viaTable('workers', ['workers_id' => 'id']);
     }
 
     /**

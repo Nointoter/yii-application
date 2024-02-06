@@ -1,5 +1,6 @@
 <?php
 
+use Faker\Factory;
 use yii\db\Migration;
 
 /**
@@ -12,7 +13,15 @@ class m240206_132631_fill_cities_table extends Migration
      */
     public function safeUp()
     {
+        $faker = Factory::create();
 
+        for ($i = 0; $i < 10; $i++)
+        {
+            $this->insert('cities', [
+                'name' => $faker->city(30),
+                'region-number' => $faker->numberBetween(1, 159),
+            ]);
+        }
     }
 
     /**
@@ -20,9 +29,7 @@ class m240206_132631_fill_cities_table extends Migration
      */
     public function safeDown()
     {
-        echo "m240206_132631_fill_cities_table cannot be reverted.\n";
-
-        return false;
+        return $this->truncateTable('cities');
     }
 
     /*
@@ -34,7 +41,7 @@ class m240206_132631_fill_cities_table extends Migration
 
     public function down()
     {
-        echo "m240206_132631_fill_cities_table cannot be reverted.\n";
+        echo "m240204_095848_fill_cities_table cannot be reverted.\n";
 
         return false;
     }
