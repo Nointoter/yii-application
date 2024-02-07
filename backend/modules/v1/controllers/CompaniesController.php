@@ -2,16 +2,19 @@
 
 namespace backend\modules\v1\controllers;
 
+use Yii;
+use yii\helpers\ArrayHelper;
 use yii\rest\ActiveController;
 use yii\web\Link;
 use yii\helpers\Url;
+use yii\web\Linkable;
 
 /**
- * Cities controller for the `v1` module
+ * Companies controller for the `v1` module
  */
-class CitiesController extends ActiveController
+class CompaniesController extends ActiveController
 {
-    public $modelClass = "backend\models\Cities";
+    public $modelClass = "backend\models\Companies";
 
     public function behaviors()
     {

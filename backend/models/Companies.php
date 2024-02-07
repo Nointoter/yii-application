@@ -2,7 +2,10 @@
 
 namespace backend\models;
 
+use Symfony\Component\DomCrawler\Link;
 use Yii;
+use yii\web\Link as WebLink;
+use yii\web\Linkable;
 
 /**
  * This is the model class for table "companies".
@@ -49,6 +52,18 @@ class Companies extends \yii\db\ActiveRecord
             'cities_id' => 'Cities ID',
             'name' => 'Name',
             'info' => 'Info',
+        ];
+    }
+
+    public function fields()
+    {
+        return ['id', 'name', 'info'];
+    }
+
+    public function extraFields()
+    {
+        return [
+            'cities_id'
         ];
     }
 
