@@ -35,11 +35,33 @@ class UserController extends Controller
 
     public function actionLogin()
     {
-        if (Yii::$app->getRequest()->getMethod() !== 'GET') {
-            Yii::$app->getResponse()->setStatusCode(405);
+        $request = Yii::$app->getRequest();
+        if ($request->getMethod() === 'POST') {
+            $body = $request->getBodyParams();
+            if ($body === null)
+            {
+                return Yii::$app->getResponse()->setStatusCode(400)->content = 'no content';
+            }
+            $user = User::findAnyByUsername(strval($body["username"]));
+            
+            if ($user === null || !$user->validatePassword(strval($body["password"])))
+            {
+                return Yii::$app->getResponse()->setStatusCode(400)->content = 'bad login or password';
+            }
+            
+            $user->generateAuthKey();
+            if ($user->save() === true)
+            {
+                $response = Yii::$app->getResponse();
+                return $response->setStatusCode(200)->content = 'login completed token = ' . $user->auth_key;
+            }
+
+            $response = Yii::$app->getResponse();
+            return $response->setStatusCode(402)->content = 'exeption while saving ';
         }
+
         $response = Yii::$app->getResponse();
-        $response->setStatusCode(201)->content = 'login';
+        $response->setStatusCode(400)->content = 'bad method';
         return $response;
     }
     
@@ -57,8 +79,6 @@ class UserController extends Controller
             $user = new User();
             $user->username = strval($body["username"]);
             $user->email = strval($body["email"]);
-            $user->created_at = $time = time();
-            $user->updated_at = $time;
             $user->setPassword(strval($body["password"]));
             $user->generateAuthKey();
             $user->generateEmailVerificationToken();
@@ -72,9 +92,7 @@ class UserController extends Controller
             $response = Yii::$app->getResponse();
             return $response->setStatusCode(402)->content = 'exeption while saving ';
         }
-        // if (Yii::$app->getRequest()->getMethod() !== 'GET') {
-        //     Yii::$app->getResponse()->setStatusCode(405);
-        // }
+
         $response = Yii::$app->getResponse();
         $response->setStatusCode(400)->content = 'bad method';
         return $response;

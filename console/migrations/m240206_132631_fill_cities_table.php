@@ -19,7 +19,7 @@ class m240206_132631_fill_cities_table extends Migration
         {
             $this->insert('cities', [
                 'name' => $faker->city(30),
-                'region-number' => $faker->numberBetween(1, 159),
+                'region_number' => $faker->numberBetween(1, 159),
             ]);
         }
     }

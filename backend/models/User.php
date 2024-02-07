@@ -8,18 +8,19 @@ use yii\web\IdentityInterface;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "user".
+ * User model
  *
- * @property int $id
+ * @property integer $id
  * @property string $username
- * @property string $auth_key
  * @property string $password_hash
- * @property string|null $password_reset_token
+ * @property string $password_reset_token
+ * @property string $verification_token
  * @property string $email
- * @property int $status
- * @property int $created_at
- * @property int $updated_at
- * @property string|null $verification_token
+ * @property string $auth_key
+ * @property integer $status
+ * @property integer $created_at
+ * @property integer $updated_at
+ * @property string $password write-only password
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -52,7 +53,9 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at'], 'required'],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::ROLE_ADMIN, self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            [['username', 'auth_key', 'password_hash', 'email'], 'required'],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['username', 'password_hash', 'password_reset_token', 'email', 'verification_token'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
@@ -108,7 +111,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::findOne(['access_token' => $token]);
+        return static::findOne(['auth_key' => $token]);
     }
 
     /**
